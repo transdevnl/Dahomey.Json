@@ -9,9 +9,9 @@
     <Company>Dahomey Technologies</Company>
     <Description>The main purpose of this library is to bring missing features to the official .Net namespace System.Text.Json</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/dahomey-technologies/Dahomey.Json</PackageProjectUrl>
+    <PackageProjectUrl></PackageProjectUrl>
     <PackageTags>serialization;json</PackageTags>
-    <RepositoryUrl>https://github.com/dahomey-technologies/Dahomey.Json.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/transdevnl/Dahomey.Json.git</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
     <Copyright>Copyright © Dahomey Technologies 2019</Copyright>
@@ -20,6 +20,8 @@
 
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>1.0.0</Version>
+    <PackageId>abt-dahomey</PackageId>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
