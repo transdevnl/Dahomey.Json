@@ -132,7 +132,7 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
                 }
                 else
                 {
-                    MemberName= MemberInfo.Name;
+                    MemberName = MemberInfo.Name;
                 }
             }
         }
@@ -199,7 +199,12 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
             if ((DefaultValue == null && MemberType.IsValueType && Nullable.GetUnderlyingType(MemberType) == null)
                 || (DefaultValue != null && DefaultValue.GetType() != MemberType))
             {
-                throw new JsonException($"Default value type mismatch");
+                throw new JsonException($"Default value type mismatch DefaultValue: {DefaultValue?.ToString()} " +
+                    $"MemberType.IsValueType: {MemberType.IsValueType} " +
+                    $"Nullable.GetUnderlyingType(MemberType): {Nullable.GetUnderlyingType(MemberType)} " +
+                    $"MemberType: {MemberType.ToString()} " +
+                    $"MemberType Fullname: {MemberType.FullName} " +
+                    $"DefaultValue.GetType(): {DefaultValue?.GetType()} ");
             }
         }
     }
