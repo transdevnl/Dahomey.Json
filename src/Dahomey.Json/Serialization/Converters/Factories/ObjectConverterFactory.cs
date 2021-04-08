@@ -1,4 +1,5 @@
-﻿using Dahomey.Json.Util;
+﻿
+using Dahomey.Json.Util;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,7 +10,9 @@ namespace Dahomey.Json.Serialization.Converters.Factories
     {
         public override bool CanConvert(Type typeToConvert)
         {
-            return typeToConvert.IsClass && typeToConvert != typeof(string)
+            return typeToConvert.IsClass 
+                    && typeToConvert != typeof(string)
+                    && typeToConvert != typeof(Uri)
                 || typeToConvert.IsInterface
                 || typeToConvert.IsStruct()
                     && typeToConvert != typeof(DateTime)

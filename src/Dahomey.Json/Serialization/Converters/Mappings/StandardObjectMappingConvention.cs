@@ -27,6 +27,11 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
                     continue;
                 }
 
+                if (typeof(Delegate).IsAssignableFrom(propertyInfo.PropertyType))
+                {
+                    continue;
+                }
+
                 MemberMapping<T> memberMapping = new MemberMapping<T>(options, objectMapping, propertyInfo, propertyInfo.PropertyType);
                 ProcessDefaultValue(propertyInfo, memberMapping);
                 ProcessShouldSerializeMethod(memberMapping);
@@ -43,6 +48,11 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
                 }
 
                 Type fieldType = fieldInfo.FieldType;
+
+                if (typeof(Delegate).IsAssignableFrom(fieldType))
+                {
+                    continue;
+                }
 
                 MemberMapping<T> memberMapping = new MemberMapping<T>(options, objectMapping, fieldInfo, fieldInfo.FieldType);
                 ProcessDefaultValue(fieldInfo, memberMapping);
@@ -63,7 +73,7 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
                 objectMapping.MapCreator(constructorInfos[0]);
             }
 
-            MethodInfo methodInfo = type.GetMethods()
+            MethodInfo? methodInfo = type.GetMethods()
                 .FirstOrDefault(m => m.IsDefined(typeof(OnDeserializingAttribute)));
             if (methodInfo != null)
             {
@@ -120,7 +130,12 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
             string shouldSerializeMethodName = "ShouldSerialize" + memberMapping.MemberInfo.Name;
             Type? objectType = memberMapping.MemberInfo.DeclaringType;
 
-            MethodInfo? shouldSerializeMethodInfo = objectType?.GetMethod(shouldSerializeMethodName, new Type[] { });
+            if (objectType == null)
+            {
+                return;
+            }
+
+            MethodInfo? shouldSerializeMethodInfo = objectType.GetMethod(shouldSerializeMethodName, new Type[] { });
             if (shouldSerializeMethodInfo != null &&
                 shouldSerializeMethodInfo.IsPublic &&
                 shouldSerializeMethodInfo.ReturnType == typeof(bool))

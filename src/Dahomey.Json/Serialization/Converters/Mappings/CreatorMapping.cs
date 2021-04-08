@@ -94,12 +94,14 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
             for (int i = 0; i < _parameters.Length; i++)
             {
                 ParameterInfo parameter = _parameters[i];
-                IMemberMapping memberMapping;
+                IMemberMapping? memberMapping;
 
                 if (createMemberNames)
                 {
+                    // Infer JSON property names: .ctor parameter --> CLR property (MemberInfo.Name) --> JSON property (MemberName)
+                    // Assumes .ctor parameter name is using the same name as CLR property. They can differ in casing.
                     memberMapping = memberMappings
-                        .FirstOrDefault(m => string.Compare(m.MemberName, parameter.Name, ignoreCase: true) == 0);
+                        .FirstOrDefault(m => string.Compare(m.MemberInfo?.Name ?? m.MemberName, parameter.Name, StringComparison.OrdinalIgnoreCase) == 0);
 
                     if (memberMapping == null || memberMapping.MemberName == null)
                     {
@@ -112,12 +114,14 @@ namespace Dahomey.Json.Serialization.Converters.Mappings
                 }
                 else
                 {
+                    // JsonConstructorExAttribute present: .ctor parameter --> JSON property (Specified in JsonConstructorExAttribute)
+                    string memberName = Encoding.UTF8.GetString(_memberNames[i].Span);
                     memberMapping = memberMappings
-                        .FirstOrDefault(m => string.Compare(m.MemberName, _memberNames[i].ToString(), ignoreCase: true) == 0);
+                        .FirstOrDefault(m => string.Compare(m.MemberName, memberName, StringComparison.OrdinalIgnoreCase) == 0);
 
                     if (memberMapping == null)
                     {
-                        throw new JsonException($"Cannot find a field or property named {_memberNames[i]} on type {_objectMapping.ObjectType.FullName}");
+                        throw new JsonException($"Cannot find a field or property named {memberName} on type {_objectMapping.ObjectType.FullName}");
                     }
                 }
 

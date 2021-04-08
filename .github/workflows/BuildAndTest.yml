@@ -27,20 +27,26 @@ jobs:
     - name: checkout
       uses: actions/checkout@v1
 
-    - name: setup .net core 2.2.207
+    - name: setup .net core 2.1.811
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 2.2.207
+        dotnet-version: 2.1.811
 
-    - name: setup .net core 3.1.100
+    - name: setup .net core 3.1.404
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.100
+        dotnet-version: 3.1.404
+        
+    - name: setup .net core 5.0.101
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.101
 
 # workaround for using multiple dotnet core installs
     - name: setup multiple sdks
       run: |
-        rsync -a ${DOTNET_ROOT/3.1.100/2.2.207}/* $DOTNET_ROOT/
+        rsync -a ${DOTNET_ROOT/5.0.101/2.1.811}/* $DOTNET_ROOT/
+        rsync -a ${DOTNET_ROOT/5.0.101/3.1.404}/* $DOTNET_ROOT/
         dotnet --info
 
     - name: build
